@@ -11,10 +11,6 @@
 		<property name="httpClient" ref="httpClient" />
 	</bean>
 	
-	<bean id="httpClient" class="org.apache.commons.httpclient.HttpClient">
-		<property name="httpConnectionManager" ref="httpConnectionManager" />
-	</bean>
+	<bean id="httpClient" class="org.apache.commons.httpclient.HttpClient" />
 	
-	<bean id="httpConnectionManager" class="org.apache.commons.httpclient.SimpleHttpConnectionManager">
-	</bean>
 </beans>

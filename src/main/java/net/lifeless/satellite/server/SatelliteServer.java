@@ -28,13 +28,17 @@ public class SatelliteServer {
 		
 		for (Host host : hosts) {
 			HttpMethod			method;
+			byte[]				response;
 			
 			log.debug("checking host:" + host);
 			
 			method		= new GetMethod(host.getUrl());
+			response	= null;
 			
 			try {
 				httpClient.executeMethod(method);
+				
+				response = method.getResponseBody();
 			} catch (HttpException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -42,7 +46,13 @@ public class SatelliteServer {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} finally {
-				httpClient.getHttpConnectionManager().getConnection(httpClient.getHostConfiguration()).releaseConnection();
+				method.releaseConnection();
+			}
+			
+			if (response != null) {
+				log.debug("content size:" + response.length);
+			} else {
+				log.debug("no content returned");
 			}
 		}
 	}
