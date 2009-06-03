@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpMethod;
@@ -29,16 +30,32 @@ public class SatelliteServer {
 		for (Host host : hosts) {
 			HttpMethod			method;
 			byte[]				response;
+			long				requestStartTime;
+			long				requestEndTime;
+			long				requestDuration;
 			
 			log.debug("checking host:" + host);
 			
-			method		= new GetMethod(host.getUrl());
-			response	= null;
+			method				= new GetMethod(host.getUrl());
+			response			= null;
+			requestStartTime	= 0;
+			requestEndTime		= 0;
+			requestDuration		= 0;
 			
 			try {
+				requestStartTime		= System.currentTimeMillis();
+				
 				httpClient.executeMethod(method);
 				
-				response = method.getResponseBody();
+				response				= method.getResponseBody();
+				requestEndTime			= System.currentTimeMillis();
+				requestDuration			= requestEndTime - requestStartTime;
+				
+				Header[] responseHeaders = method.getResponseHeaders();
+				
+				for (Header header : responseHeaders) {
+					log.debug("header:" + header.getName() + " value:" + header.getValue());
+				}
 			} catch (HttpException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -50,7 +67,7 @@ public class SatelliteServer {
 			}
 			
 			if (response != null) {
-				log.debug("content size:" + response.length);
+				log.debug("content size:" + response.length + " requestDuration:" + requestDuration + "ms");
 			} else {
 				log.debug("no content returned");
 			}
