@@ -38,6 +38,13 @@ public class SatelliteServerTest {
 		
 		server.getHosts().add(host);
 		
+		host		= new Host();
+		
+		host.setId("3");
+		host.setUrl("http://www.apple.com");
+		
+		server.getHosts().add(host);
+		
 		server.run();
 	}
 }
